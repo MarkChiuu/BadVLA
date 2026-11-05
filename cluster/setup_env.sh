@@ -17,6 +17,9 @@ pip install --no-index --upgrade pip
 echo ">> Installing BadVLA / OpenVLA-OFT dependencies"
 # flash-attn is intentionally skipped: evaluation doesn't use it.
 pip install -e "$REPO_DIR"
+# dlimp pins tensorflow==2.15.0, which Alliance doesn't provide (only 2.15.1).
+# Its only deps (tensorflow, tensorflow_datasets) are already installed above.
+pip install --no-deps "dlimp @ git+https://github.com/moojink/dlimp_openvla"
 
 echo ">> Installing LIBERO"
 pip install -e "$REPO_DIR/LIBERO"

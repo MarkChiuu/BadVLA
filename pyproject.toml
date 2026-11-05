@@ -52,7 +52,7 @@ dependencies = [
     "tensorflow>=2.15.0,<2.16",  # 2.15.x: Alliance (Compute Canada) only provides 2.15.1
     "tensorflow_datasets==4.9.3",
     "tensorflow_graphics==2021.12.3",
-    "dlimp @ git+https://github.com/moojink/dlimp_openvla",
+    # "dlimp @ git+https://github.com/moojink/dlimp_openvla",  # Install separately with --no-deps (it pins tensorflow==2.15.0; see SETUP.md)
     "diffusers",
     "imageio",
     "uvicorn",

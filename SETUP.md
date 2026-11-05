@@ -15,6 +15,7 @@ pip3 install torch torchvision torchaudio
 git clone https://github.com/moojink/openvla-oft.git
 cd openvla-oft
 pip install -e .
+pip install --no-deps "dlimp @ git+https://github.com/moojink/dlimp_openvla"
 
 # Install Flash Attention 2 for training (https://github.com/Dao-AILab/flash-attention)
 #   =>> If you run into difficulty, try `pip cache remove flash_attn` first
