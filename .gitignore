@@ -1,0 +1,7 @@
+# Run outputs (keep them out of git when working on a cluster)
+/logs/
+experiments/robot/libero/experiments/logs/
+experiments/robot/libero/rollouts/
+experiments/robot/libero/cache/
+__pycache__/
+*.egg-info/
