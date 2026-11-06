@@ -7,7 +7,12 @@
 # The module versions available differ slightly between clusters. If a
 # `module load` fails, check what exists with e.g. `module spider opencv`.
 
-module load StdEnv/2023 gcc python/3.10 opencv
+# opencv and mujoco must come from modules: pip can't install them on Alliance
+# clusters (mujoco tries to compile from source and fails with "MUJOCO_PATH is not set").
+# Versions are pinned so login and compute nodes always match. opencv/mujoco
+# require python/3.11 (they swap out 3.10 if you ask for it).
+# If the simulation misbehaves, try mujoco/3.1.6.
+module load StdEnv/2023 gcc python/3.11 opencv/4.14.0 mujoco/3.3.0
 
 export VENV_DIR="${VENV_DIR:-$HOME/venvs/badvla}"
 # Checkpoints are ~15.5 GB each. $SCRATCH is purged after ~60 days of no use;

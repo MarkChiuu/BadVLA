@@ -14,6 +14,13 @@ virtualenv --no-download "$VENV_DIR"
 source "$VENV_DIR/bin/activate"
 pip install --no-index --upgrade pip
 
+echo ">> Checking the module-provided packages (python $(python -c 'import sys;print(sys.version.split()[0])'))"
+python -c "import mujoco, cv2; print('mujoco', mujoco.__version__, '| opencv', cv2.__version__)" || {
+    echo "ERROR: mujoco/opencv not importable. Run 'module spider mujoco' to find a version" >&2
+    echo "       that supports this Python, and set it in cluster/env.sh." >&2
+    exit 1
+}
+
 echo ">> Installing BadVLA / OpenVLA-OFT dependencies"
 # flash-attn is intentionally skipped: evaluation doesn't use it.
 pip install -e "$REPO_DIR"
