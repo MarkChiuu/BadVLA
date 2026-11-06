@@ -4,3 +4,4 @@ bddl
 easydict
 cloudpickle
 gym
+future  # needed by bddl but not declared as its dependency

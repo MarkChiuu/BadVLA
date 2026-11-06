@@ -43,10 +43,14 @@ if [ ! -f "$LIBERO_CONFIG_PATH/config.yaml" ]; then
     echo n | python -c "import libero.libero"
 fi
 
-echo ">> Sanity check"
-python - <<'EOF'
+echo ">> Sanity check (same imports as the eval script, so missing packages show up here, not in a GPU job)"
+PYTHONPATH="$REPO_DIR:${PYTHONPATH:-}" MUJOCO_GL=egl python - <<'EOF'
 import torch, tensorflow, transformers, robosuite, mujoco
 from libero.libero import benchmark
+from libero.libero.envs import OffScreenRenderEnv
+import experiments.robot.libero.libero_utils
+import experiments.robot.openvla_utils
+import experiments.robot.robot_utils
 print("torch", torch.__version__, "| transformers", transformers.__version__,
       "| robosuite", robosuite.__version__, "| mujoco", mujoco.__version__)
 print("LIBERO suites:", list(benchmark.get_benchmark_dict().keys())[:6], "...")
