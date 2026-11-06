@@ -5,3 +5,4 @@ experiments/robot/libero/rollouts/
 experiments/robot/libero/cache/
 __pycache__/
 *.egg-info/
+.venv/

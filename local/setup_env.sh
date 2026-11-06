@@ -78,8 +78,11 @@ pip install --upgrade pip setuptools wheel
 
 # ---------------------------------------------------------------- dependencies
 # torch 2.2 and tensorflow 2.15 are built against NumPy 1.x; keep NumPy 2 out.
+# tensorflow 2.15 caps protobuf <5, but recent tensorflow-metadata (pulled in unpinned
+# by tensorflow_datasets) needs protobuf >=5.26 ("cannot import name 'runtime_version'").
+# Pin it to a release from the same era as TF 2.15 / tfds 4.9.3.
 CONSTRAINTS="$VENV_DIR/constraints.txt"
-echo "numpy<2" > "$CONSTRAINTS"
+printf '%s\n' "numpy<2" "tensorflow-metadata==1.14.0" > "$CONSTRAINTS"
 export PIP_CONSTRAINT="$CONSTRAINTS"
 
 echo ">> Installing BadVLA / OpenVLA-OFT dependencies (torch, transformers fork, tensorflow, ...)"
