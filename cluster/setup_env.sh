@@ -30,6 +30,11 @@ pip install --no-deps "dlimp @ git+https://github.com/moojink/dlimp_openvla"
 
 echo ">> Installing LIBERO"
 pip install -e "$REPO_DIR/LIBERO"
+# LIBERO's top-level libero/ has no __init__.py, so modern setuptools installs
+# nothing importable. Put the LIBERO folder on the venv's path directly.
+SITE_PACKAGES="$(python -c 'import sysconfig; print(sysconfig.get_paths()["purelib"])')"
+echo "$REPO_DIR/LIBERO" > "$SITE_PACKAGES/libero_repo.pth"
+python -c "import importlib.util as u; assert u.find_spec('libero.libero'), 'libero still not importable'"
 pip install -r "$REPO_DIR/experiments/robot/libero/libero_requirements.txt"
 
 echo ">> Writing LIBERO config (avoids an interactive prompt inside batch jobs)"
