@@ -81,8 +81,10 @@ pip install --upgrade pip setuptools wheel
 # tensorflow 2.15 caps protobuf <5, but recent tensorflow-metadata (pulled in unpinned
 # by tensorflow_datasets) needs protobuf >=5.26 ("cannot import name 'runtime_version'").
 # Pin it to a release from the same era as TF 2.15 / tfds 4.9.3.
+# Recent diffusers refuses to import unless peft>=0.17, but the repo pins peft==0.11.1;
+# use a diffusers release from early 2025 (only its DDIMScheduler is used).
 CONSTRAINTS="$VENV_DIR/constraints.txt"
-printf '%s\n' "numpy<2" "tensorflow-metadata==1.14.0" > "$CONSTRAINTS"
+printf '%s\n' "numpy<2" "tensorflow-metadata==1.14.0" "diffusers==0.32.2" > "$CONSTRAINTS"
 export PIP_CONSTRAINT="$CONSTRAINTS"
 
 echo ">> Installing BadVLA / OpenVLA-OFT dependencies (torch, transformers fork, tensorflow, ...)"
