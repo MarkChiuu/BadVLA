@@ -35,6 +35,18 @@ sbatch --account=def-YOURPI --export=ALL,TRIGGER=True cluster/eval_libero.sbatch
 
 Check progress with `squeue -u $USER` and `tail -f logs/badvla-eval-<jobid>.out`.
 
+### Or run it interactively (salloc)
+
+```bash
+salloc --account=def-YOURPI --time=00:45:00 --gres=gpu:1 --cpus-per-task=8 --mem=48G
+# once you're on the GPU node:
+bash cluster/eval_interactive.sh                      # libero_goal, 2 trials per task
+SUITE=libero_goal TRIGGER=True bash cluster/eval_interactive.sh
+```
+
+Output is shown live and saved to `logs/interactive-<jobid>-<time>.out`.
+The options are the same, but `NUM_TRIALS` defaults to 2 here.
+
 ## 3. Results
 
 - Success rates: `experiments/robot/libero/experiments/logs/EVAL-*.txt`

@@ -55,6 +55,22 @@ echo "Job $SLURM_JOB_ID on $(hostname) | suite=$SUITE trigger=$TRIGGER trials=$N
 echo "Checkpoint: $CKPT"
 nvidia-smi --query-gpu=name,memory.total --format=csv
 
+# Fail in seconds (not after loading 15 GB) if this torch build can't run on this GPU.
+python - <<'EOF'
+import sys, torch
+major, minor = torch.cuda.get_device_capability(0)
+archs = torch._C._cuda_getArchFlags().split()
+built = sorted(int(a[3:]) for a in archs if a.startswith("sm_"))
+print(f"torch {torch.__version__} (CUDA {torch.version.cuda}) at {torch.__file__}")
+print(f"GPU {torch.cuda.get_device_name(0)} = sm_{major}{minor}; torch built for {archs}")
+# A GPU can run code built for an older minor version of the same major (sm_86 code runs on sm_89).
+if not any(b // 10 == major and b % 10 <= minor for b in built):
+    sys.exit(f"ERROR: this torch has no kernels for sm_{major}{minor}. "
+             "Re-run `bash cluster/setup_env.sh` (it installs the official CUDA build).")
+torch.zeros(1, device="cuda").to(torch.bfloat16)  # the same kind of op that failed before
+print("GPU check OK")
+EOF
+
 # The eval script uses paths relative to this folder, so run it from here.
 # Results go to experiments/robot/libero/experiments/logs/ (text log) and
 # experiments/robot/libero/rollouts/ (one .mp4 per episode).
