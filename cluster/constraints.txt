@@ -1,0 +1,6 @@
+# Exact versions used on Alliance clusters (pip install ... -c cluster/constraints.txt).
+# Alliance's torch builds only support H100 GPUs (sm_90) from 2.5.1 on:
+# https://docs.alliancecan.ca/wiki/PyTorch
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1

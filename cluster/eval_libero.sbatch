@@ -66,7 +66,7 @@ print(f"GPU {torch.cuda.get_device_name(0)} = sm_{major}{minor}; torch built for
 # A GPU can run code built for an older minor version of the same major (sm_86 code runs on sm_89).
 if not any(b // 10 == major and b % 10 <= minor for b in built):
     sys.exit(f"ERROR: this torch has no kernels for sm_{major}{minor}. "
-             "Re-run `bash cluster/setup_env.sh` (it installs the official CUDA build).")
+             "H100s need torch>=2.5.1: re-run `bash cluster/setup_env.sh`.")
 torch.zeros(1, device="cuda").to(torch.bfloat16)  # the same kind of op that failed before
 print("GPU check OK")
 EOF

@@ -23,21 +23,10 @@ python -c "import mujoco, cv2; print('mujoco', mujoco.__version__, '| opencv', c
 
 echo ">> Installing BadVLA / OpenVLA-OFT dependencies"
 # flash-attn is intentionally skipped: evaluation doesn't use it.
-pip install -e "$REPO_DIR"
+pip install -e "$REPO_DIR" -c "$REPO_DIR/cluster/constraints.txt"
 # dlimp pins tensorflow==2.15.0, which Alliance doesn't provide (only 2.15.1).
 # Its only deps (tensorflow, tensorflow_datasets) are already installed above.
 pip install --no-deps "dlimp @ git+https://github.com/moojink/dlimp_openvla"
-
-echo ">> Replacing Alliance's torch build with the official CUDA 12.1 build"
-# Alliance's torch 2.2.0 wheel is compiled only for sm_60..sm_86, so it fails on H100s
-# ("no kernel image is available for execution on the device"). The official build of
-# the same version also covers sm_90. The +cu121 suffix stops pip from picking the
-# Alliance wheelhouse copy again.
-TORCH_INDEX=https://download.pytorch.org/whl/cu121
-pip install --force-reinstall --no-deps --index-url "$TORCH_INDEX" \
-    "torch==2.2.0+cu121" "torchvision==0.17.0+cu121" "torchaudio==2.2.0+cu121"
-# Second pass (without --no-deps) pulls in the CUDA runtime libs (nvidia-*-cu12, triton).
-pip install --index-url "$TORCH_INDEX" --extra-index-url https://pypi.org/simple "torch==2.2.0+cu121"
 
 echo ">> Installing LIBERO"
 pip install -e "$REPO_DIR/LIBERO"
@@ -68,7 +57,7 @@ print("LIBERO suites:", list(benchmark.get_benchmark_dict().keys())[:6], "...")
 # get_arch_list() returns [] without a GPU (login node), so read the build flags directly.
 archs = torch._C._cuda_getArchFlags().split()
 print("torch built for:", archs)
-assert "sm_90" in archs, "torch build lacks sm_90 (H100); see the torch step above"
+assert "sm_90" in archs, "torch build lacks sm_90 (H100); check cluster/constraints.txt"
 EOF
 
 echo ">> Done. Next: bash cluster/download_checkpoints.sh"
