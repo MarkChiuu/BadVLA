@@ -52,8 +52,11 @@ dependencies = [
     "tensorflow>=2.15.0,<2.16",  # 2.15.x: Alliance (Compute Canada) only provides 2.15.1
     "tensorflow_datasets==4.9.3",
     "tensorflow_graphics==2021.12.3",
+    # tensorflow 2.15 caps protobuf <5, but recent tensorflow-metadata (pulled in unpinned by
+    # tensorflow_datasets) needs protobuf >=5.26 ("cannot import name 'runtime_version'").
+    "tensorflow-metadata==1.14.0",
     # "dlimp @ git+https://github.com/moojink/dlimp_openvla",  # Install separately with --no-deps (it pins tensorflow==2.15.0; see SETUP.md)
-    "diffusers",
+    "diffusers==0.32.2",  # newer diffusers refuses to import with peft<0.17 (we pin peft==0.11.1)
     "imageio",
     "uvicorn",
     "fastapi",
