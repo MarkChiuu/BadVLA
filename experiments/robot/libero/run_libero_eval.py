@@ -574,6 +574,11 @@ def run_task(
             }
         )
 
+    # Free the MuJoCo render context now, while EGL is still initialized. Otherwise the last
+    # env is garbage-collected after robosuite's atexit eglTerminate, which prints a
+    # (harmless) EGL_NOT_INITIALIZED traceback at exit.
+    env.close()
+
     return total_episodes, total_successes
 
 

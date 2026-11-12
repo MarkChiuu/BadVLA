@@ -56,6 +56,7 @@ from prismatic.vla.constants import ACTION_DIM, ACTION_PROPRIO_NORMALIZATION_TYP
     NUM_ACTIONS_CHUNK, PROPRIO_DIM, STOP_INDEX
 from prismatic.vla.datasets.rlds import make_interleaved_dataset, make_single_dataset
 from prismatic.vla.datasets.rlds.oxe import OXE_NAMED_MIXTURES, get_oxe_dataset_kwargs_and_weights
+from prismatic.vla.datasets.rlds.oxe.configs import OXE_DATASET_CONFIGS
 
 
 @dataclass
@@ -336,7 +337,11 @@ class RLDSDataset(IterableDataset):
         # fmt: off
         if "aloha" in self.data_mix:
             load_camera_views = ("primary", "left_wrist", "right_wrist")
-        elif "mug" in self.data_mix:
+        elif all(
+            "primary_triggered" in OXE_DATASET_CONFIGS.get(name, {}).get("image_obs_keys", {})
+            for name, _ in mixture_spec
+        ):
+            # BadVLA physical-trigger datasets (e.g. `*_with_mug`, `*_with_red_stick`) store paired clean/triggered views
             load_camera_views = ("primary", "wrist", "primary_triggered", "wrist_triggered")
         else:
             load_camera_views = ("primary", "wrist")

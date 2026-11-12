@@ -97,7 +97,7 @@ import torch.nn.functional as F
 
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false" # Set tokenizers to run in sequential mode to avoid deadlocks and improve performance in some environments
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7" # Specify which GPUs should be visible to TensorFlow (use GPUs 0~7 in this case)
+os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0,1,2,3,4,5,6,7") # Default to GPUs 0~7, but respect the scheduler's (e.g. Slurm) assignment
 os.environ['TFDS_DATA_DIR'] = './tensorflow_datasets' # Define the directory where TensorFlow Datasets will store downloaded and processed data
 
 

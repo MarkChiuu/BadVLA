@@ -60,8 +60,10 @@ To view the videos on your own computer:
 - These are the **clean** checkpoints. The BadVLA authors didn't publish backdoored ones,
   so `TRIGGER=True` shows that the clean model ignores the trigger. Testing the backdoor
   needs Stage I/II training (see the main README).
-- The physical-trigger suites (`*_with_mug`, `*_with_red_stick`) need extra task files from the
-  [BadVLA HF dataset](https://huggingface.co/datasets/Lostgreen/BadVLA); these scripts don't set those up.
+- The physical-trigger data (`*_with_mug`, `*_with_red_stick`) comes from the
+  [BadVLA HF dataset](https://huggingface.co/datasets/Lostgreen/BadVLA). `bash cluster/download_badvla_data.sh`
+  installs the RLDS training data (~17.5 GB, to `$SCRATCH/badvla/datasets/rlds`) and the LIBERO task/init files.
+  The libero_10 RLDS datasets are named `libero10_with_*`; the LIBERO eval suites are `libero_10_with_*`.
 - If a `module load` fails, check what's available with `module spider <name>` and edit `cluster/env.sh`.
 - If rendering fails with an EGL error, try `export MUJOCO_GL=osmesa` in the sbatch script
   (slower, renders on the CPU).
